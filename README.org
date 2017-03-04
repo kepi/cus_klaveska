@@ -1,23 +1,40 @@
 * Kepiho ČUS kláveska
 [2017-03-04 So 00:34]
 
-Klávesnice se chová ve většině ohledů jako standardní US QWERTY klávesnice, ale umožňuje nám psát české znaky bez přepínání klávesnice. Konkrétně rozdíly:
+Klávesnice se chová ve většině ohledů jako standardní US QWERTY klávesnice, ale umožňuje nám psát české znaky bez přepínání klávesnice.
 
 [[./preview/cust_cz_us-0.png]]
 
-- na vrchní řadě nepíšeme čísla, ale klasické české ěščř...
-- čísla píšeme s pravým Alt
-- znaky =ů= je vlevo vedle =ě= a =+= ještě o jeden vedle.
-
 Zásadní výhoda je, že klávesnice zůstává stejná s jedinou výjimkou čísel při použití pravého altu. Všechny znaky můžete napsat s jediným layoutem.
 
+** Rozdíly oproti US či CZ klávesnici
+
+- na vrchní řadě nepíšeme čísla, ale klasické české ěščř...
+- čísla píšeme s pravým Alt
+- znaky =ů= je vlevo vedle =ě= a =+= ještě o jeden vedle, lépe mrknout na obrázek.
+- místo =Caps Lock= máme =Ctrl=. Pokud navíc =Caps Lock= pouze zmáčkneme a nedržíme, chová se jako =Esc=
+ 
 Celý layout lze prohlédnout v [[./preview/cust_cz_us.pdf][PDF s layoutem.]]
 
-** Přidání keyboard layoutu
+** Rychlé rozjetí
+
+Pod svým uživatelem:
+
+#+BEGIN_SRC bash
+git clone git@git.igloonet.cz:kepi/cus-klaveska.git
+cd cus-klaveska
+sudo cp cust_cz_us /usr/share/X11/xkb/symbols/cust_cz_us
+sudo cp keyboard /etc/default/keyboard
+setxkbmap cust_cz_us -option ralt_switch,terminate:ctrl_alt_bksp,grp_led:scroll,ctrl:nocaps && xcape -e 'Control_L=Escape'
+#+END_SRC
+
+Hotovo
+
+** Trošku podrobněji
+*** Přidání keyboard layoutu
 Nastavení keyboard layoutu je třeba umístit do souboru [[/usr/share/X11/xkb/symbols/cust_cz_us]]
 
 #+BEGIN_SRC 
-
 default
 xkb_symbols "basic" {
     include "us(basic)"
@@ -61,12 +78,11 @@ xkb_symbols "basic" {
     include "level3(ralt_switch)"
     // include "level5(caps_switch)"
 };
-
 #+END_SRC
 
+*** Nastavení keyboard layoutu
 Dále je třeba nastavit, aby se tato konfigurace použila. XKB Options použijeme k nastavení =Ctrl= namísto =Caps Lock=
 
-** Nastavení keyboard layoutu
 Nastavení klávesnice v debianu standardně v [[/etc/default/keyboard]]
 
 #+BEGIN_SRC  sh
@@ -81,7 +97,7 @@ XKBOPTIONS="ralt_switch,terminate:ctrl_alt_bksp,grp_led:scroll,ctrl:nocaps"
 BACKSPACE="guess"
 #+END_SRC
 
-** Úprava chování Caps Locku
+*** Úprava chování Caps Locku
 A protože je mi to málo, nastavím ještě lepší chování =Caps Lock= kdy při zmáčknutí se chová jako =Esc= a při podržení jako =Ctrl=
 
 #+BEGIN_SRC sh
@@ -94,8 +110,7 @@ Nevím jestli je třeba, ale mám to v autostart souboru nastavené historicky t
 setxkbmap cust_cz_us -option ralt_switch,terminate:ctrl_alt_bksp,grp_led:scroll,ctrl:nocaps && xcape -e 'Control_L=Escape'
 #+END_SRC
 
-** Vygenerování aktuálního layoutu do PDF
-
+*** Vygenerování aktuálního layoutu do PDF
 Tohle není třeba nijak řešit, ale pokud uděláme změny v layoutu, můžeme si chtít refreshnout obrázky.
 
 Aby to šlo pěkně i českými znaky, je třeba pořídit patchnutý program *ogonkify*. Postup je následující:
