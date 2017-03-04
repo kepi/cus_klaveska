@@ -1,4 +1,4 @@
---- /usr/bin/ogonkify	2016-11-06 11:17:47.000000000 +0100
+--- ogonkify	2016-11-06 11:17:47.000000000 +0100
 +++ ogonkify	2017-03-04 01:46:59.347625295 +0100
 @@ -87,6 +87,9 @@
      $remappings{'Helvetica-Oblique_AX'}="Helvetica-Oblique-Ogonki";

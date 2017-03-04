@@ -3,12 +3,17 @@
 
 Klávesnice se chová ve většině ohledů jako standardní US QWERTY klávesnice, ale umožňuje nám psát české znaky bez přepínání klávesnice. Konkrétně rozdíly:
 
+[[./preview/cust_cz_us-0.png]]
+
 - na vrchní řadě nepíšeme čísla, ale klasické české ěščř...
 - čísla píšeme s pravým Alt
 - znaky =ů= je vlevo vedle =ě= a =+= ještě o jeden vedle.
 
-Lépe vidět v PDF s layoutem [[./cust_cz_us.pdf]]
+Zásadní výhoda je, že klávesnice zůstává stejná s jedinou výjimkou čísel při použití pravého altu. Všechny znaky můžete napsat s jediným layoutem.
 
+Celý layout lze prohlédnout v [[./preview/cust_cz_us.pdf][PDF s layoutem.]]
+
+** Přidání keyboard layoutu
 Nastavení keyboard layoutu je třeba umístit do souboru [[/usr/share/X11/xkb/symbols/cust_cz_us]]
 
 #+BEGIN_SRC 
@@ -61,7 +66,9 @@ xkb_symbols "basic" {
 
 Dále je třeba nastavit, aby se tato konfigurace použila. XKB Options použijeme k nastavení =Ctrl= namísto =Caps Lock=
 
+** Nastavení keyboard layoutu
 Nastavení klávesnice v debianu standardně v [[/etc/default/keyboard]]
+
 #+BEGIN_SRC  sh
 # KEYBOARD CONFIGURATION FILE
 
@@ -74,6 +81,7 @@ XKBOPTIONS="ralt_switch,terminate:ctrl_alt_bksp,grp_led:scroll,ctrl:nocaps"
 BACKSPACE="guess"
 #+END_SRC
 
+** Úprava chování Caps Locku
 A protože je mi to málo, nastavím ještě lepší chování =Caps Lock= kdy při zmáčknutí se chová jako =Esc= a při podržení jako =Ctrl=
 
 #+BEGIN_SRC sh
@@ -86,9 +94,20 @@ Nevím jestli je třeba, ale mám to v autostart souboru nastavené historicky t
 setxkbmap cust_cz_us -option ralt_switch,terminate:ctrl_alt_bksp,grp_led:scroll,ctrl:nocaps && xcape -e 'Control_L=Escape'
 #+END_SRC
 
-** Vytisknutí layoutu ať se dá prohlídnout kde co je
-Nejdříve jsem musel nainstalovat =a2ps= a následně patchnout program =ogonkify= dle http://www.meduna.org/sw_a2ps_en.html abych měl pěkně vytištěný názvy kláves a ne nějaký scaron místo š.
+** Vygenerování aktuálního layoutu do PDF
+
+Tohle není třeba nijak řešit, ale pokud uděláme změny v layoutu, můžeme si chtít refreshnout obrázky.
+
+Aby to šlo pěkně i českými znaky, je třeba pořídit patchnutý program *ogonkify*. Postup je následující:
+
+#+BEGIN_SRC bash
+[[ -f /usr/bin/ogonkify ]] || sudo apt-get install a2ps
+[[ -f tools/ogonkify ]] || (cd tools && cp /usr/bin/ogonkify ./ && patch -p0 < ogonkify.patch)
+#+END_SRC
+
+Následně už můžeme spustit vygenerování PDF:
 
 #+BEGIN_SRC sh :results none
-setxkbmap -layout cust_cz_us  -print | xkbcomp -xkm - - | xkbprint -color -lc cs_CZ - - | ./tools/ogonkify -XP | ps2pdf - | pdftk - cat 1left output cust_cz_us.pdf
+setxkbmap -layout cust_cz_us  -print | xkbcomp -xkm - - | xkbprint -color -lc cs_CZ -npk 1 - - | ./tools/ogonkify -XP | ps2pdf - | pdftk - cat 1-endwest output preview/cust_cz_us.pdf
+convert -trim -density 100 preview/cust_cz_us.pdf -quality 100 preview/cust_cz_us.png
 #+END_SRC
