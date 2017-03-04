@@ -1,0 +1,105 @@
+--- /usr/bin/ogonkify	2016-11-06 11:17:47.000000000 +0100
++++ ogonkify	2017-03-04 01:46:59.347625295 +0100
+@@ -87,6 +87,9 @@
+     $remappings{'Helvetica-Oblique_AX'}="Helvetica-Oblique-Ogonki";
+     $remappings{'Helvetica-BoldOblique_AX'}="Helvetica-BoldOblique-Ogonki";
+   }
++  if ($doXkbprint) {
++    $remappings{'Helvetica-Narrow-Bold'}="Helvetica-Bold-Ogonki";
++  }
+ }
+ 
+ sub adobeCourierRemappings {
+@@ -227,6 +230,7 @@
+   elsif (/^-M$/) { $doMosaic=TRUE; }
+   elsif (/^-mp$/) { $doMp=TRUE; }
+   elsif (/^-F$/) { $doXfig=TRUE; }
++  elsif (/^-XP$/) { $doXkbprint=TRUE; &helveticaRemappings; &helveticaFonts; }
+   else { &usage ; die "\n"; }
+ }
+ 
+@@ -234,6 +238,11 @@
+   die "Unknown encoding $encoding";
+ }
+ 
++if($doXkbprint && $encoding ne 'L2' && $encoding ne 'L1') {
++  die "-XP currently only works with encoding L2";
++}
++
++
+ $where=0;
+ while(<>) {
+   if($where==0) {
+@@ -286,10 +295,71 @@
+                  m|/([^ \t]+)[ \t]+/([^ \t]+)[ \t]+isovec[ \t]+ReEncode|) {
+           &remap($2,$1,$encodingvecs{$encoding});
+           next;
+-        }       
++        } elsif ($doXkbprint) {
++          s/ISOLatin1Encoding/$encodingvecs{$encoding}/;
++        }
+       }
+       print;
+   } elsif($where==2) {
++      if ($doXkbprint) {
++        s#\(Aogonek\)#(\\241)#o;
++        s#\(breve\)#\\(\242)#o;
++        s#\(Lstroke\)#(\\243)#o;
++        s#\(Lcaron\)#(\\245)#o;
++        s#\(Sacute\)#(\\246)#o;
++        s#\(Scaron\)#(\\251)#o;
++        s#\(Scedilla\)#(\\252)#o;
++        s#\(Tcaron\)#(\\253)#o;
++        s#\(Zacute\)#(\\254)#o;
++        s#\(Zcaron\)#(\\256)#o;
++        s#\(Zabovedot\)#(\\257)#o;
++        s#\(aogonek\)#(\\261)#o;
++        s#\(ogonek\)#(\\262)#o;
++        s#\(lstroke\)#(\\263)#o;
++        s#\(lcaron\)#(\\265)#o;
++        s#\(sacute\)#(\\266)#o;
++        s#\(caron\)#(\\267)#o;
++        s#\(scaron\)#(\\271)#o;
++        s#\(scedilla\)#(\\272)#o;
++        s#\(tcaron\)#(\\273)#o;
++        s#\(zacute\)#(\\274)#o;
++        s#\(doubleacute\)#(\\275)#o;
++        s#\(zcaron\)#(\\276)#o;
++        s#\(zabovedot\)#(\\277)#o;
++        s#\(Racute\)#(\\300)#o;
++        s#\(Abreve\)#(\\303)#o;
++        s#\(Lacute\)#(\\305)#o;
++        s#\(Cacute\)#(\\306)#o;
++        s#\(Ccaron\)#(\\310)#o;
++        s#\(Eogonek\)#(\\312)#o;
++        s#\(Ecaron\)#(\\314)#o;
++        s#\(Dcaron\)#(\\317)#o;
++        s#\(Dstroke\)#(\\320)#o;
++        s#\(Nacute\)#(\\321)#o;
++        s#\(Ncaron\)#(\\322)#o;
++        s#\(Odoubleacute\)#(\\325)#o;
++        s#\(Rcaron\)#(\\330)#o;
++        s#\(Uring\)#(\\331)#o;
++        s#\(Udoubleacute\)#(\\333)#o;
++        s#\(Tcedilla\)#(\\336)#o;
++        s#\(racute\)#(\\340)#o;
++        s#\(abreve\)#(\\343)#o;
++        s#\(lacute\)#(\\345)#o;
++        s#\(cacute\)#(\\346)#o;
++        s#\(ccaron\)#(\\350)#o;
++        s#\(eogonek\)#(\\352)#o;
++        s#\(ecaron\)#(\\354)#o;
++        s#\(dcaron\)#(\\357)#o;
++        s#\(dstroke\)#(\\360)#o;
++        s#\(nacute\)#(\\361)#o;
++        s#\(ncaron\)#(\\362)#o;
++        s#\(odoubleacute\)#(\\365)#o;
++        s#\(rcaron\)#(\\370)#o;
++        s#\(uring\)#(\\371)#o;
++        s#\(udoubleacute\)#(\\373)#o;
++        s#\(tcedilla\)#(\\376)#o;
++        s#\(abovedot\)#(\\377)#o;
++    }
+     print;
+   }
+ }
