@@ -3,7 +3,7 @@
 Klávesnice se chová ve většině ohledů jako standardní /US QWERTY/ klávesnice, ale
 umožňuje psát české znaky bez přepínání klávesnice.
 
-[[./preview/cus_klaveska-0.png]]
+[[./preview/cus_klaveska_group1.png]]
 
 Klávesnice obsahuje v základním rozložení všechny potřebné znaky pro
 programování i české texty, kromě čísel. Ta je nutné psát s pravým Altem.
@@ -91,7 +91,6 @@ Nastavení klávesnice v debianu standardně v [[/etc/default/keyboard]]
 # KEYBOARD CONFIGURATION FILE
 
 # Consult the keyboard(5) manual page.
-
 XKBMODEL="pc105"
 XKBLAYOUT="cus_klaveska"
 XKBVARIANT=""
@@ -119,18 +118,21 @@ setxkbmap cus_klaveska -option ralt_switch,terminate:ctrl_alt_bksp,grp_led:scrol
 ** Vygenerování aktuálního layoutu do PDF
 Tohle není třeba nijak řešit, ale pokud uděláme změny v layoutu, můžeme si chtít refreshnout obrázky.
 
-Aby to šlo pěkně i českými znaky, je třeba pořídit patchnutý program *ogonkify*. Postup je následující:
+Aby to šlo pěkně i českými znaky, je třeba pořídit patchnutý program *ogonkify*.
 
-#+BEGIN_SRC bash
-[[ -f /usr/bin/ogonkify ]] || sudo apt-get install a2ps
-[[ -f tools/ogonkify ]] || (cd tools && cp /usr/bin/ogonkify ./ && patch -p0 < ogonkify.patch)
-#+END_SRC
+1. nainstalujte =a2ps= (např. ~apt install a2ps~ na Debianu nebo ~pacman -S a2ps~ na Archu)
+2. spusťte v terminálu ~[[ -f tools/ogonkify ]] || (cd tools && cp /usr/bin/ogonkify ./ && patch -p0 < ogonkify.patch)~ 
 
 Následně už můžeme spustit vygenerování PDF:
 
 #+BEGIN_SRC sh :results none
-setxkbmap -layout cus_klaveska  -print | xkbcomp -xkm - - | xkbprint -color -lc cs_CZ -npk 1 - - | ./tools/ogonkify -XP | ps2pdf - | pdftk - cat 1-endwest output preview/cus_klaveska.pdf
-convert -trim -density 100 preview/cus_klaveska.pdf -quality 100 preview/cus_klaveska.png
+setxkbmap -layout cus_klaveska -print | \
+  xkbcomp -xkm - - | \
+  xkbprint -color -lc cs_CZ -npk 1 -label symbols -level2 - - | \
+  ./tools/ogonkify -XP | \
+  ps2pdf - | \
+  pdftk - cat 1-endwest output preview/cus_klaveska.pdf
 #+END_SRC
+
 * TODO Windows
 Obdobně mám rozjeté i na Windows, musím doplnit.
