@@ -30,11 +30,24 @@ Pod svým uživatelem:
 git clone https://github.com/kepi/cus_klaveska.git
 cd cus-klaveska
 sudo cp cus_klaveska /usr/share/X11/xkb/symbols/cus_klaveska
-sudo cp keyboard /etc/default/keyboard
-setxkbmap cus_klaveska -option ralt_switch,terminate:ctrl_alt_bksp,grp_led:scroll,ctrl:nocaps && xcape -e 'Control_L=Escape'
 #+END_SRC
 
-Hotovo
+** Nastavení jako výchozí klávesnice
+*** Debian
+#+begin_src sh
+sudo cp keyboard /etc/default/keyboard
+#+end_src
+
+*** Arch Linux
+#+begin_src sh
+sudo localectl set-keymap cus_klaveska ralt_switch,terminate:ctrl_alt_bksp,grp_led:scroll,ctrl:nocaps
+sudo localectl set-x11-keymap cus_klaveska ralt_switch,terminate:ctrl_alt_bksp,grp_led:scroll,ctrl:nocaps
+#+end_src
+
+*** Ruční přepnutí
+#+begin_src sh
+setxkbmap cus_klaveska -option ralt_switch,terminate:ctrl_alt_bksp,grp_led:scroll,ctrl:nocaps
+#+end_src
 
 * Trošku podrobněji
 ** Přidání keyboard layoutu
@@ -104,22 +117,16 @@ XKBOPTIONS="ralt_switch,terminate:ctrl_alt_bksp,grp_led:scroll,ctrl:nocaps"
 BACKSPACE="guess"
 #+END_SRC
 
-** Úprava chování Caps Locku
+** Duální Ctrl/Escape klávesa místo CapsLock
 Pokud je vám to málo, můžete přes /xcape/ nastavit ještě to, aby se =Caps Lock= při zmáčknutí choval jako =Esc= a při podržení jako =Ctrl=.
 
 #+BEGIN_SRC sh
 xcape -e 'Control_L=Escape'
 #+END_SRC
 
-Pokud nechcete, stačí /xcape/ vynechat při spouštění. Já to tak např. používám jen
-na některých klávesnicích, kde nemám =Ctrl= na vhodnějším místě.
+To se může hodit na běžných klávesnicích, které toto neumí ve svém firmware.
 
-Nevím jestli je třeba, ale mám to v autostart souboru nastavené historicky takto
-(zdá se mi, že se duplikuje konfigurace z keyboard)
-
-#+BEGIN_SRC sh
-setxkbmap cus_klaveska -option ralt_switch,terminate:ctrl_alt_bksp,grp_led:scroll,ctrl:nocaps && xcape -e 'Control_L=Escape'
-#+END_SRC
+Tento =xcape= si pak samozřejmě musíte přihodit někam do autostart souborů.
 
 ** Vygenerování aktuálního layoutu do PDF
 Tohle není třeba nijak řešit, ale pokud uděláme změny v layoutu, můžeme si chtít refreshnout obrázky.
