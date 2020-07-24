@@ -1,12 +1,18 @@
 #+TITLE: ČUS kláveska
 
-Klávesnice se chová ve většině ohledů jako standardní /US QWERTY/ klávesnice, ale
-umožňuje psát české znaky bez přepínání klávesnice.
+Pokud programujete, spravujete servery nebo prostě děláte cokoliv techničtějšího
+na počítači a zároveň potřebujete psát česky, rozhodně si klávesku alespoň vyzkoušejte.
+
+#+begin_quote
+Přepínání mezi českým a anglickým rozložením je jedna z nejhorších věcí, která
+může potkat programátorovu produktivitu.
+#+end_quote
+
+Výhodou *ČUS klávesky* je to, že s minimální obětí - snadné psaní čísel a
+přehozené písmenko =ů= - přináší všechny potřebné znaky na jednom rozložení. Díky
+tomu dokážete v pohodě psát české texty i programovat.
 
 [[./preview/cus_klaveska_group1.png]]
-
-Klávesnice obsahuje v základním rozložení všechny potřebné znaky pro
-programování i české texty, kromě čísel. Ta je nutné psát s pravým Altem.
 
 * Rozdíly oproti US či CZ klávesnici
 - na vrchní řadě nepíšeme čísla, ale klasické české ěščř...
