@@ -27,7 +27,7 @@ Celý layout lze prohlédnout v [[./preview/cus_klaveska.pdf][PDF s layoutem.]]
 Pod svým uživatelem:
 
 #+BEGIN_SRC bash
-git clone https://github.com/kepi/cus-klaveska.git
+git clone https://github.com/kepi/cus_klaveska.git
 cd cus-klaveska
 sudo cp cus_klaveska /usr/share/X11/xkb/symbols/cus_klaveska
 sudo cp keyboard /etc/default/keyboard
