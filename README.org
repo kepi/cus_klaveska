@@ -28,7 +28,7 @@ Pod svým uživatelem:
 
 #+BEGIN_SRC bash
 git clone https://github.com/kepi/cus_klaveska.git
-cd cus-klaveska
+cd cus_klaveska
 sudo cp cus_klaveska /usr/share/X11/xkb/symbols/cus_klaveska
 #+END_SRC
 
